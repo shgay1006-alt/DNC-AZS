@@ -1,5 +1,6 @@
 import sgMail from '@sendgrid/mail';
 
+console.log("KEY:", process.env.SENDGRID_API_KEY);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export default async function handler(req, res) {
@@ -12,8 +13,8 @@ export default async function handler(req, res) {
     const { name, email, message } = req.body;
 
     const msg = {
-      to: '관리자이메일@gmail.com',
-      from: '인증된이메일@gmail.com',
+      to: 'shgay1005@naver.com',
+      from: 'shgay1005@naver.com',
       subject: '폼 제출',
       text: `이름: ${name}\n이메일: ${email}\n내용: ${message}`,
     };
