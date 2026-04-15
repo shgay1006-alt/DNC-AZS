@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>폼 입력 시스템</title>
+</head>
+
+<body>
+
+  <h2>로그인</h2>
+
+  <input id="id" placeholder="아이디"><br><br>
+  <input id="pw" type="password" placeholder="비밀번호"><br><br>
+
+  <button onclick="login()">로그인</button>
+
+  <hr>
+
+  <!-- 👇 로그인 성공 시 보이는 영역 -->
+  <div id="form" style="display:none;">
+    <h2>정보 입력</h2>
+
+    <input id="name" placeholder="이름"><br><br>
+    <input id="email" placeholder="이메일"><br><br>
+    <textarea id="message" placeholder="내용"></textarea><br><br>
+
+    <button onclick="submitForm()">전송</button>
+  </div>
+
+  <!-- 👇 여기 중요: JS 코드 -->
+  <script>
+
+    let userRole = "";
+
+    // 로그인 함수
+    async function login() {
+      const id = document.getElementById("id").value;
+      const password = document.getElementById("pw").value;
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id, password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        userRole = data.role;
+        document.getElementById("form").style.display = "block";
+        alert("로그인 성공!");
+      } else {
+        alert("아이디 또는 비밀번호가 틀렸습니다.");
+      }
+    }
+
+    // 폼 전송 함수
+    async function submitForm() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+
+      await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      alert("전송 완료!");
+    }
+
+  </script>
+
+</body>
+</html>
